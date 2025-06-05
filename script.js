@@ -1,22 +1,41 @@
-// Scroll animations
-window.addEventListener("scroll", () => {
-  document.querySelectorAll(".fade-in").forEach((el) => {
-    const pos = el.getBoundingClientRect().top;
-    if (pos < window.innerHeight - 50) el.classList.add("visible");
-  });
-});
+// Theme toggle + sound
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      const audio = new Audio("https://www.fesliyanstudios.com/play-mp3/387");
+      audio.play();
+    });
 
-// Sound on hover
-const hoverSound = new Audio("https://www.fesliyanstudios.com/play-mp3/387"); // You can change the URL
+    // Dark mode styles
+    const style = document.createElement('style');
+    style.innerHTML = `
+      body.dark {
+        background: linear-gradient(to right, #1f1c2c, #928dab);
+        color: #fff;
+      }
+      body.dark .card {
+        background: #2c2a4a;
+        color: white;
+      }
+      body.dark button {
+        background: #e67e22;
+      }
+    `;
+    document.head.appendChild(style);
 
-document.querySelectorAll(".card, button").forEach((el) => {
-  el.addEventListener("mouseenter", () => {
-    hoverSound.play();
-  });
-});
-
-// Toggle theme
-const themeBtn = document.getElementById("theme-toggle");
-themeBtn?.addEventListener("click", () => {
-  document.body.classList.toggle("dark");
-});
+    // Voice input
+    function startListening() {
+      const output = document.getElementById("voiceOutput");
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'en-US';
+      recognition.start();
+      recognition.onresult = (event) => {
+        const text = event.results[0][0].transcript;
+        output.textContent = `You said: "${text}"`;
+      };
+      recognition.onerror = (e) => {
+        output.textContent = "Could not understand. Try again.";
+      };
+    }
+  </script>
+</body>
+</html>
